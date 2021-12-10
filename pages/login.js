@@ -1,13 +1,49 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useLoginMutation } from '../store/api.slice'
+import { setLogin, setToken, testAction } from '../store/app.slice'
 import Link from 'next/link'
+import { useDispatch, useSelector } from 'react-redux'
+import { useRouter } from 'next/router'
+
+function setCookie(cname, cvalue, exdays) {
+  const d = new Date()
+  d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000)
+  let expires = 'expires=' + d.toUTCString()
+  document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/'
+}
 
 function Login() {
+  const dispatch = useDispatch()
+  const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [errorLogin, setErrorLogin] = useState('')
   const [login, { data: loginData, error: loginError }] = useLoginMutation()
 
+  const { token } = useSelector((state) => state.app)
+
+  useEffect(() => {
+    if (loginData) {
+      dispatch(setLogin(true))
+      dispatch(setToken(loginData.access_token))
+      setCookie('ACCESS_TOKEN', `${loginData.access_token}`, 3)
+      router.push('/')
+    } else if (loginError) {
+      if (loginError.data.error_code !== 400) {
+        setErrorLogin('Có lỗi xảy ra, vui lòng thử lại.')
+        return
+      }
+      if (loginError.data.error_messages === 'Email or password is incorrect!') {
+        setErrorLogin('Sai tài khoản hoặc mật khẩu. Vui lòng thử lại')
+      }
+      if (loginError.data.error_messages?.email) {
+        setErrorLogin('Không được bỏ trống bất kỳ trường nào')
+      }
+    }
+  }, [loginData, loginError])
+
   const handleLogin = () => {
+    setErrorLogin('')
     login({ email, password })
   }
   return (
@@ -68,6 +104,7 @@ function Login() {
                 >
                   Đăng nhập
                 </button>
+                {errorLogin && <div className="text-sm mt-2 text-red-400">* {errorLogin}</div>}
               </div>
               <p className="text-sm text-center text-gray-400">
                 Chưa có tài khoản?{' '}

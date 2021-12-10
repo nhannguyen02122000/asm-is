@@ -65,8 +65,8 @@ export const axiosBaseQuery =
   async ({ url, method = 'GET', data, ...rest }) => {
     try {
       const result = await axiosRetry({ url, method, data, ...rest })
-      console.log(result)
-      return { data: result.data.data }
+      // console.log(result)
+      return { data: result.data }
     } catch (axiosError) {
       const err = axiosError
       console.log(err)
