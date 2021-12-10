@@ -1,14 +1,21 @@
-import { useState } from 'react'
-import { useRegisterMutation } from '../store/api.slice'
+import { useState, useEffect } from 'react'
+import { useRegisterMutation, useLoginMutation } from '../store/api.slice'
 import Link from 'next/link'
+import { setLogin, setToken } from '../store/app.slice'
+import { useRouter } from 'next/router'
+import { useDispatch } from 'react-redux'
+import { setCookie } from '../utils/cookies'
 
 function Register() {
+  const router = useRouter()
+  const dispatch = useDispatch()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [repass, setRePass] = useState('')
   const [errorRePass, setErrorRePass] = useState('')
   const [errorPass, setErrorPass] = useState('')
-  const [register, { data: registerData, error: regiterError }] = useRegisterMutation()
+  const [register, { data: registerData, error: regiterError, isLoading: loadingReg }] = useRegisterMutation()
+  const [login, { data: loginData, error: loginError, isLoading: loadingLog }] = useLoginMutation()
 
   const handleLogin = () => {
     setErrorRePass('')
@@ -22,6 +29,40 @@ function Register() {
     if (password.length < 8 || password !== repass) return
     register({ email, password })
   }
+
+  useEffect(() => {
+    if (registerData) {
+      login({ email, password })
+    } else if (regiterError) {
+      if (regiterError.data.error_message === 'This email has already exist!') {
+        alert('Email đã được đăng ký!')
+      } else {
+        alert('Có lỗi xảy ra, vui lòng thử lại!')
+      }
+    }
+  }, [regiterError, registerData])
+
+  useEffect(() => {
+    if (loginData) {
+      dispatch(setLogin(true))
+      dispatch(setToken(loginData.access_token))
+      setCookie('ACCESS_TOKEN', `${loginData.access_token}`, 3)
+      router.push('/')
+    } else if (loginError) {
+      if (loginError.data.error_code !== 400) {
+        alert('Có lỗi xảy ra, vui lòng thử lại.')
+        return
+      }
+      if (loginError.data.error_message === 'Email or password is incorrect!') {
+        alert('Sai tài khoản hoặc mật khẩu. Vui lòng thử lại')
+        return
+      }
+      if (loginError.data.error_messages?.email) {
+        alert('Không được bỏ trống bất kỳ trường nào')
+      }
+    }
+  }, [loginData, loginError])
+
   return (
     <div className="flex items-center min-h-screen dark:bg-gray-900">
       <div className="container mx-auto">
@@ -88,10 +129,14 @@ function Register() {
               <div className="mb-6 mt-6">
                 <button
                   type="button"
-                  className="w-full px-3 py-4 text-white bg-indigo-500 rounded-md focus:bg-indigo-600 focus:outline-none"
+                  className="w-full px-3 py-4 text-white flex justify-center bg-indigo-500 rounded-md focus:bg-indigo-600 focus:outline-none"
                   onClick={handleLogin}
                 >
-                  Đăng ký
+                  {loadingReg || loadingLog ? (
+                    <div class="w-6 h-6 border-b-2 border-gray-900 rounded-full animate-spin"></div>
+                  ) : (
+                    <div>Đăng ký</div>
+                  )}
                 </button>
               </div>
               <p className="text-sm text-center text-gray-400">

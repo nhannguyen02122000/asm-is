@@ -4,13 +4,7 @@ import { setLogin, setToken, testAction } from '../store/app.slice'
 import Link from 'next/link'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
-
-function setCookie(cname, cvalue, exdays) {
-  const d = new Date()
-  d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000)
-  let expires = 'expires=' + d.toUTCString()
-  document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/'
-}
+import { setCookie } from '../utils/cookies'
 
 function Login() {
   const dispatch = useDispatch()
@@ -18,7 +12,7 @@ function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [errorLogin, setErrorLogin] = useState('')
-  const [login, { data: loginData, error: loginError }] = useLoginMutation()
+  const [login, { data: loginData, error: loginError, isLoading: loginLoading }] = useLoginMutation()
 
   const { token } = useSelector((state) => state.app)
 
@@ -33,8 +27,9 @@ function Login() {
         setErrorLogin('Có lỗi xảy ra, vui lòng thử lại.')
         return
       }
-      if (loginError.data.error_messages === 'Email or password is incorrect!') {
+      if (loginError.data.error_message === 'Email or password is incorrect!') {
         setErrorLogin('Sai tài khoản hoặc mật khẩu. Vui lòng thử lại')
+        return
       }
       if (loginError.data.error_messages?.email) {
         setErrorLogin('Không được bỏ trống bất kỳ trường nào')
@@ -99,10 +94,14 @@ function Login() {
               <div className="mb-6">
                 <button
                   type="button"
-                  className="w-full px-3 py-4 text-white bg-indigo-500 rounded-md focus:bg-indigo-600 focus:outline-none"
+                  className="w-full px-3 py-4 text-white bg-indigo-500 flex justify-center rounded-md focus:bg-indigo-600 focus:outline-none"
                   onClick={handleLogin}
                 >
-                  Đăng nhập
+                  {loginLoading ? (
+                    <div class="w-6 h-6 border-b-2 border-gray-900 rounded-full animate-spin"></div>
+                  ) : (
+                    <div>Đăng nhập</div>
+                  )}
                 </button>
                 {errorLogin && <div className="text-sm mt-2 text-red-400">* {errorLogin}</div>}
               </div>
