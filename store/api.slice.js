@@ -4,7 +4,7 @@ import { axiosBaseQuery } from '../utils/axios-settings'
 const apiSlice = createApi({
   reducerPath: 'appApi',
   baseQuery: axiosBaseQuery(),
-  tagTypes: [],
+  tagTypes: ['Movie'],
   endpoints: (builder) => {
     return {
       register: builder.mutation({
@@ -28,10 +28,25 @@ const apiSlice = createApi({
           },
         }),
       }),
+
+      getMovies: builder.query({
+        query: ({ token }) => ({
+          url: `/movies`,
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        providesTags: ['Movie'],
+      }),
+
+      getMoviesByCode: builder.query({
+        query: ({ id, token }) => ({
+          url: `/movies/${id}`,
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+      }),
     }
   },
 })
 
-export const { useRegisterMutation, useLoginMutation } = apiSlice
+export const { useRegisterMutation, useLoginMutation, useGetMoviesQuery, useGetMoviesByCodeQuery } = apiSlice
 
 export default apiSlice

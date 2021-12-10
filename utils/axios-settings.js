@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
+import { getCookie } from './cookies'
 
 export const appApiAxios = axios.create({
   baseURL: process.env.BASE_API_URL,
@@ -8,7 +9,7 @@ export const appApiAxios = axios.create({
 
 appApiAxios.interceptors.request.use(
   (request) => {
-    // request.headers['Trace-Id'] = randomID()
+    // request.headers['Authorization'] = `Bearer ${getCookie('ACCESS_TOKEN')}`
     return request
   },
   (error) => {
