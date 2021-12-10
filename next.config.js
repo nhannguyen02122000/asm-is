@@ -1,6 +1,6 @@
 const variables = {
   BASE_URL: ``,
-  BASE_API_URL: 'http://movie-rec-sys-hcmut.herokuapp.com/api',
+  BASE_API_URL: 'https://movie-rec-sys-hcmut1.herokuapp.com/api',
 }
 
 const additionalVariables = {
