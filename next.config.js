@@ -5,6 +5,7 @@ const variables = {
 
 const additionalVariables = {
   SHOPEE_URL: 'https://uat.shopee.vn',
+  APP_NAME: 'AnimeN'
 }
 
 const moduleExports = {
