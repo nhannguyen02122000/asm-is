@@ -1,6 +1,8 @@
 import Head from 'next/head'
 
 export default function Home() {
+  console.log(process.env.SHOPEE_URL)
+  console.log(process.env.NODE_ENV)
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <Head>
