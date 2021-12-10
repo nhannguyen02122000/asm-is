@@ -1,5 +1,6 @@
 import 'tailwindcss/tailwind.css'
 import '../styles/globals.css'
+import Head from 'next/head'
 
 function MyApp({ Component, pageProps }) {
   // return <Component {...pageProps} />
@@ -20,8 +21,6 @@ function MyApp({ Component, pageProps }) {
       {/* <Provider store={store}> */}
       <Component {...pageProps} />
       {/* </Provider> */}
-      <WBLoader />
-      <GALoader />
     </>
   )
 }
