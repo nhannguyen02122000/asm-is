@@ -1,7 +1,9 @@
 import Head from 'next/head'
 import Header from '../components/Header'
+import Nav from '../components/Nav'
 
 export default function Home() {
+  console.log(process.env.BASE_API_URL)
   return (
     <div>
       <Head>
@@ -11,7 +13,7 @@ export default function Home() {
 
       <Header />
       {/* HEADER */}
-
+      <Nav />
       {/* NAV */}
 
       {/* RESULTS */}

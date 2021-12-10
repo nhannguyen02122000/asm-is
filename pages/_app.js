@@ -1,6 +1,8 @@
 import 'tailwindcss/tailwind.css'
 import '../styles/globals.css'
 import Head from 'next/head'
+import { Provider } from 'react-redux'
+import store from '../store'
 
 function MyApp({ Component, pageProps }) {
   // return <Component {...pageProps} />
@@ -18,9 +20,9 @@ function MyApp({ Component, pageProps }) {
         />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/iamdustan-smoothscroll/0.4.0/smoothscroll.min.js"></script>
       </Head>
-      {/* <Provider store={store}> */}
-      <Component {...pageProps} />
-      {/* </Provider> */}
+      <Provider store={store}>
+        <Component {...pageProps} />
+      </Provider>
     </>
   )
 }
