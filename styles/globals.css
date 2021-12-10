@@ -1,0 +1,8 @@
+:root {
+  --background: #ffffff;
+  --primary: #ee4d2d;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
