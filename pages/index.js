@@ -23,7 +23,13 @@ export default function Home() {
       {/* HEADER */}
       <Nav />
       {/* NAV */}
-      {!isLoading && data && <Results data={data} />}
+      {!isLoading && data ? (
+        <Results data={data} />
+      ) : (
+        <div className="flex justify-center mt-10">
+          <div className="w-10 h-10 border-b-2 border-white rounded-full animate-spin"></div>
+        </div>
+      )}
       {/* RESULTS */}
     </div>
   )

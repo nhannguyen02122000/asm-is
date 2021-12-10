@@ -1,6 +1,8 @@
 import { ThumbUpIcon } from '@heroicons/react/outline'
 import Image from 'next/image'
-
+import StarRatings from 'react-star-ratings'
+import { useState } from 'react'
+import { useRouter } from 'next/router'
 const getImageLink = (idx) => {
   if (idx % 10 === 0) {
     return 'https://cdn.myanimelist.net/images/anime/4/19644.jpg'
@@ -26,17 +28,38 @@ const getImageLink = (idx) => {
 }
 
 function Thumbnail({ result }) {
+  const [rating, setRating] = useState(0)
+  const router = useRouter()
+  const onRatingChange = (val) => {
+    console.log(val)
+    setRating(val)
+  }
+  const handleClick = () => {
+    router.push(`/watch/?rating=${rating}&movie=${result.name}`)
+  }
   return (
-    <div className="group cursor-pointer p-3 transition duration-200 ease-in transform sm:hover:scale-105 hover-:z-50">
-      <Image layout="responsive" height={900} width={600} src={getImageLink(result.id)} />
+    <div className="group cursor-pointer p-3 ">
+      <Image layout="responsive" height={600} width={400} src={getImageLink(result.id)} onClick={handleClick} />
       <div className="p-2">
         <p className="truncate max-w-md">{result.genre}</p>
-        <h2 className="mt-1 text-2xl text-white transition-all duration-100 ease-in-out group-hover:font-bold">
+        <h2
+          className="mt-1 text-2xl text-white transition-all duration-100 ease-in-out group-hover:font-bold"
+          onClick={handleClick}
+        >
           {result.name}
         </h2>
-        <p>
-          <ThumbUpIcon className="h-5 mt-1" />
-        </p>
+        <div className="z-50">
+          <StarRatings
+            rating={rating}
+            starRatedColor="yellow"
+            starHoverColor="yellow"
+            changeRating={onRatingChange}
+            numberOfStars={5}
+            name="rating"
+            starDimension="25px"
+            starSpacing="5px"
+          />
+        </div>
       </div>
     </div>
   )
