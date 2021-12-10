@@ -5,7 +5,7 @@ const variables = {
 
 const additionalVariables = {
   SHOPEE_URL: 'https://uat.shopee.vn',
-  APP_NAME: 'AnimeN'
+  APP_NAME: 'AnimeN',
 }
 
 const moduleExports = {
@@ -21,6 +21,9 @@ const moduleExports = {
   // assetPrefix: customENV !== 'dev' ? process.env.STATIC_URL : '',
   trailingSlash: true,
   reactStrictMode: true,
+  images: {
+    domains: ['links.papareact.com', 'image.tmdb.org'],
+  },
 
   // webpack(config) {
   //   const rules = config.module.rules
