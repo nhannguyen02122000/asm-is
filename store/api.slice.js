@@ -6,8 +6,32 @@ const apiSlice = createApi({
   baseQuery: axiosBaseQuery(),
   tagTypes: [],
   endpoints: (builder) => {
-    return {}
+    return {
+      register: builder.mutation({
+        query: ({ email, password }) => ({
+          url: `/register`,
+          method: 'POST',
+          data: {
+            email,
+            password,
+          },
+        }),
+      }),
+
+      login: builder.mutation({
+        query: ({ email, password }) => ({
+          url: `/login`,
+          method: 'POST',
+          data: {
+            email,
+            password,
+          },
+        }),
+      }),
+    }
   },
 })
+
+export const { useRegisterMutation, useLoginMutation } = apiSlice
 
 export default apiSlice

@@ -8,7 +8,7 @@ export const appApiAxios = axios.create({
 
 appApiAxios.interceptors.request.use(
   (request) => {
-    request.headers['Trace-Id'] = randomID()
+    // request.headers['Trace-Id'] = randomID()
     return request
   },
   (error) => {
@@ -65,9 +65,11 @@ export const axiosBaseQuery =
   async ({ url, method = 'GET', data, ...rest }) => {
     try {
       const result = await axiosRetry({ url, method, data, ...rest })
+      console.log(result)
       return { data: result.data.data }
     } catch (axiosError) {
       const err = axiosError
+      console.log(err)
       return {
         error: { status: err.response?.status, data: err.response?.data },
       }

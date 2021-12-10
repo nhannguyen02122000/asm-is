@@ -3,6 +3,7 @@ import '../styles/globals.css'
 import Head from 'next/head'
 import { Provider } from 'react-redux'
 import store from '../store'
+import Auth from '../components/Authentication'
 
 function MyApp({ Component, pageProps }) {
   // return <Component {...pageProps} />
@@ -21,7 +22,9 @@ function MyApp({ Component, pageProps }) {
         <script src="https://cdnjs.cloudflare.com/ajax/libs/iamdustan-smoothscroll/0.4.0/smoothscroll.min.js"></script>
       </Head>
       <Provider store={store}>
-        <Component {...pageProps} />
+        <Auth>
+          <Component {...pageProps} />
+        </Auth>
       </Provider>
     </>
   )
