@@ -67,6 +67,14 @@ const apiSlice = createApi({
           headers: { Authorization: `Bearer ${token}` },
         }),
       }),
+
+      getSuggestion: builder.query({
+        query: ({ token }) => ({
+          url: `/suggestion`,
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        providesTags: ['Movie'],
+      }),
     }
   },
 })
@@ -78,6 +86,7 @@ export const {
   useGetMoviesByCodeQuery,
   useRatingMutation,
   useWatchingMutation,
+  useGetSuggestionQuery,
 } = apiSlice
 
 export default apiSlice

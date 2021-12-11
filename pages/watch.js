@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useGetMoviesQuery, useWatchingMutation } from '../store/api.slice'
 import { useSelector } from 'react-redux'
-import { useRatingMutation } from '../store/api.slice'
+import { useRatingMutation, useGetSuggestionQuery } from '../store/api.slice'
+import Image from 'next/image'
 
 function Watch() {
   const router = useRouter()
@@ -15,6 +16,7 @@ function Watch() {
   const { data, error: errorMovie, isLoading } = useGetMoviesQuery({ token }, { skip: !isReady || !token })
   const [rateOnDB, { data: rateDBData, error: rateDBError }] = useRatingMutation()
   const [watchOnDB, { data: watchDBData, error: watchDBError }] = useWatchingMutation()
+  const { data: dataSuggestion, error: errorSuggesion } = useGetSuggestionQuery({ token }, { skip: !token })
 
   const [rating, setRating] = useState(0)
   const [ele, setEle] = useState(null)
@@ -50,6 +52,13 @@ function Watch() {
   }, [watchDBData, watchDBError])
 
   useEffect(() => {
+    if (dataSuggestion) {
+    } else if (errorSuggesion) {
+      alert('Có lỗi xảy ra, vui lòng thử lại')
+    }
+  }, [dataSuggestion, errorSuggesion])
+
+  useEffect(() => {
     if (errorMovie) router.push('/')
   }, [errorMovie])
 
@@ -61,37 +70,58 @@ function Watch() {
       </div>
     )
   return (
-    <div className="flex flex-col justify-center items-center p-5">
-      <div className="self-start mb-8">
-        <h2 className="text-3xl">Xem phim: {`${ele?.name ?? ''}`}</h2>
-        <p className="text-lg mt-1">Tập: {`${ele?.episodes ?? ''}`}</p>
-      </div>
-      <iframe
-        className="w-3/4 h-[50vh]"
-        // width="853"
-        // height="480"
-        src={`https://www.youtube.com/embed/qig4KOK2R2g?enablejsapi=1&wmode=opaque&autoplay=1`}
-        frameBorder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-        title="Embedded youtube"
-      />
-      <div className="flex items-center mt-5">
-        <p className="mr-2">Rating: </p>
-        <div className="z-50">
-          <StarRatings
-            rating={rating}
-            starRatedColor="yellow"
-            starHoverColor="yellow"
-            changeRating={onRatingChange}
-            numberOfStars={5}
-            name="rating"
-            starDimension="25px"
-            starSpacing="5px"
-          />
+    <>
+      <div className="flex flex-col justify-center items-center p-5">
+        <div className="self-start mb-8">
+          <h2 className="text-3xl">Xem phim: {`${ele?.name ?? ''}`}</h2>
+          <p className="text-lg mt-1">Tập: {`${ele?.episodes ?? ''}`}</p>
+        </div>
+        <iframe
+          className="w-3/4 h-[50vh]"
+          // width="853"
+          // height="480"
+          src={`https://www.youtube.com/embed/qig4KOK2R2g?enablejsapi=1&wmode=opaque&autoplay=1`}
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          title="Embedded youtube"
+        />
+        <div className="flex items-center mt-5">
+          <p className="mr-2">Rating: </p>
+          <div className="z-50">
+            <StarRatings
+              rating={rating}
+              starRatedColor="yellow"
+              starHoverColor="yellow"
+              changeRating={onRatingChange}
+              numberOfStars={5}
+              name="rating"
+              starDimension="25px"
+              starSpacing="5px"
+            />
+          </div>
         </div>
       </div>
-    </div>
+      <div className="relative mt-1 p-5">
+        <h2 className="text-xl mb-5">Các phim liên quan</h2>
+        <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 flex flex-col items-center">
+          {dataSuggestion &&
+            dataSuggestion.result.map((ele, idx) => (
+              <div
+                className="w-80 sm:w-60 p-3 transition duration-100 transform cursor-pointer hover:scale-105"
+                key={idx}
+                onClick={() => {
+                  router.push(`/watch/?id=${ele.id}`)
+                }}
+              >
+                <Image layout="responsive" height={900} width={600} src={ele.image} onClick={() => {}} />
+                <h2 className="text-xl md:text-2xl truncate max-w-md">{ele.name}</h2>
+                <p>Tập: {ele.episodes}</p>
+              </div>
+            ))}
+        </div>
+      </div>
+    </>
   )
 }
 
