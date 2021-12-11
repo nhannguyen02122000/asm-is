@@ -38,12 +38,12 @@ function Thumbnail({ result }) {
     router.push(`/watch/?rating=${rating}&movie=${result.name}`)
   }
   return (
-    <div className="group cursor-pointer p-3 ">
-      <Image layout="responsive" height={600} width={400} src={getImageLink(result.id)} onClick={handleClick} />
+    <div className="group cursor-pointer sm:p-3 ">
+      <Image layout="responsive" height={300} width={200} src={getImageLink(result.id)} onClick={handleClick} />
       <div className="p-2">
         <p className="truncate max-w-md">{result.genre}</p>
         <h2
-          className="mt-1 text-2xl text-white transition-all duration-100 ease-in-out group-hover:font-bold"
+          className="mt-1 text-2xl text-white transition-all duration-100 ease-in-out group-hover:font-bold truncate"
           onClick={handleClick}
         >
           {result.name}
@@ -56,8 +56,8 @@ function Thumbnail({ result }) {
             changeRating={onRatingChange}
             numberOfStars={5}
             name="rating"
-            starDimension="25px"
-            starSpacing="5px"
+            starDimension="20px"
+            starSpacing="3px"
           />
         </div>
       </div>
