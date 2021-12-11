@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useGetMoviesQuery } from '../store/api.slice'
 import { useSelector } from 'react-redux'
+import { useRatingMutation } from '../store/api.slice'
 
 function Watch() {
   const router = useRouter()
@@ -12,12 +13,25 @@ function Watch() {
     query: { id },
   } = router
   const { data, error: errorMovie, isLoading } = useGetMoviesQuery({ token }, { skip: !isReady || !token })
+  const [rateOnDB, { data: rateDBData, error: rateDBError }] = useRatingMutation()
 
   const [rating, setRating] = useState(0)
   const [ele, setEle] = useState(null)
   const onRatingChange = (val) => {
     setRating(val)
+    if (ele) {
+      rateOnDB({ movieid: ele.id, rating: (val * 9) / 5, token })
+    } else {
+      alert('Có lỗi xảy ra, vui lòng thử lại')
+    }
   }
+
+  useEffect(() => {
+    if (rateDBData) {
+    } else if (rateDBError) {
+      alert('Có lỗi xảy ra, vui lòng thử lại')
+    }
+  }, [rateDBData, rateDBError])
 
   useEffect(() => {
     if (!data || !id) return
