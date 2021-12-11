@@ -14,6 +14,7 @@ function Watch() {
   const { data, error: errorMovie, isLoading } = useGetMoviesQuery({ token }, { skip: !isReady || !token })
 
   const [rating, setRating] = useState(0)
+  const [ele, setEle] = useState(null)
   const onRatingChange = (val) => {
     setRating(val)
   }
@@ -22,14 +23,24 @@ function Watch() {
     if (!data || !id) return
     const ele = data.result.find((ele) => ele.id === +id)
     setRating((ele.rating * 5) / 9)
+    setEle(ele)
   }, [data, id])
 
-  // if (!ratingS) return null
+  useEffect(() => {
+    if (errorMovie) router.push('/')
+  }, [errorMovie])
+
+  if (isLoading) return null
   return (
-    <div className="">
+    <div className="flex flex-col justify-center items-center p-5">
+      <div className="self-start mb-8">
+        <h2 className="text-3xl">Xem phim: {`${ele?.name ?? ''}`}</h2>
+        <p className="text-lg mt-1">Tập: {`${ele?.episodes ?? ''}`}</p>
+      </div>
       <iframe
-        width="853"
-        height="480"
+        className="w-3/4 h-[50vh]"
+        // width="853"
+        // height="480"
         src={`https://www.youtube.com/embed/qig4KOK2R2g?enablejsapi=1&wmode=opaque&autoplay=1`}
         frameBorder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
