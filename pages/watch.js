@@ -53,7 +53,13 @@ function Watch() {
     if (errorMovie) router.push('/')
   }, [errorMovie])
 
-  if (isLoading) return null
+  if (isLoading)
+    return (
+      <div className="flex flex-col items-center justify-center mt-12">
+        <div className="w-10 h-10 border-b-2 border-white rounded-full animate-spin"></div>
+        <p className="mt-2">Đợi một chút nhé</p>
+      </div>
+    )
   return (
     <div className="flex flex-col justify-center items-center p-5">
       <div className="self-start mb-8">
