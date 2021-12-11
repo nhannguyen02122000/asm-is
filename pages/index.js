@@ -5,7 +5,7 @@ import Nav from '../components/Nav'
 import Results from '../components/Results'
 import { useGetMoviesQuery, useGetSuggestionQuery } from '../store/api.slice'
 import { eraseCookie } from '../utils/cookies'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
 export default function Home() {
@@ -13,6 +13,13 @@ export default function Home() {
   const token = useSelector((state) => state.app.token)
   const { data, error: errorMovie, isLoading } = useGetMoviesQuery({ token }, { skip: !token })
   const { data: dataSuggestion, error: errorSuggesion } = useGetSuggestionQuery({ token }, { skip: !token })
+  const [displayData, setDisplayData] = useState([])
+  const [loading, setLoading] = useState(false)
+
+  const {
+    isReady,
+    query: { gerne },
+  } = router
 
   useEffect(() => {
     if (!errorSuggesion && !errorMovie) return
@@ -26,6 +33,20 @@ export default function Home() {
     }
   }, [errorSuggesion, errorMovie])
 
+  useEffect(() => {
+    if (!isReady || !data) return
+    setLoading(true)
+    if (!gerne) {
+      setDisplayData(data.result)
+    } else {
+      setDisplayData(data.result.filter((ele) => ele.genre.toLowerCase().includes(gerne)))
+    }
+  }, [isReady, data, gerne])
+
+  useEffect(() => {
+    setLoading(false)
+  }, [displayData])
+
   return (
     <div>
       <Head>
@@ -37,8 +58,8 @@ export default function Home() {
       {/* HEADER */}
       <Nav />
       {/* NAV */}
-      {!isLoading && data ? (
-        <Results data={data.result} />
+      {!isLoading && !loading && data ? (
+        <Results data={displayData} />
       ) : (
         <div className="flex flex-col items-center justify-center mt-12">
           <div className="w-10 h-10 border-b-2 border-white rounded-full animate-spin"></div>
