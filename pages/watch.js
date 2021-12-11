@@ -71,13 +71,21 @@ function Watch() {
     )
   return (
     <>
+      <div
+        className="xs:absolute xs:right-0 xs:top-0 cursor-pointer flex justify-center"
+        onClick={() => {
+          router.push('/')
+        }}
+      >
+        <Image className="object-contain" src="https://links.papareact.com/ua6" width={200} height={100} />
+      </div>
       <div className="flex flex-col justify-center items-center p-5">
         <div className="self-start mb-8">
-          <h2 className="text-3xl">Xem phim: {`${ele?.name ?? ''}`}</h2>
-          <p className="text-lg mt-1">Tập: {`${ele?.episodes ?? ''}`}</p>
+          <h2 className="text-xl xs:text-3xl">Xem phim: {`${ele?.name ?? ''}`}</h2>
+          <p className="mt-2 xs:mt-1">Tập: {`${ele?.episodes ?? ''}`}</p>
         </div>
         <iframe
-          className="w-3/4 h-[65vh]"
+          className="w-3/4 xs:h-[65vh] h-[20vh]"
           // width="853"
           // height="480"
           src={`https://www.youtube.com/embed/qig4KOK2R2g?enablejsapi=1&wmode=opaque&autoplay=1`}

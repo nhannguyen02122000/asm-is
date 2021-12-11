@@ -1,3 +1,4 @@
+const defaultTheme = require('tailwindcss/defaultTheme')
 module.exports = {
   mode: 'jit',
   purge: [
@@ -12,6 +13,8 @@ module.exports = {
     extend: {
       screens: {
         '3xl': '2000px',
+        xs: '380px',
+        ...defaultTheme.screens,
       },
     },
   },
