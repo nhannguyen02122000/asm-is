@@ -5,6 +5,10 @@ export function setCookie(cname, cvalue, exdays) {
   document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/'
 }
 
+export function eraseCookie(name) {
+  document.cookie = name + '=; Max-Age=-99999999;'
+}
+
 export function getCookie(cname) {
   let name = cname + '='
   let decodedCookie = decodeURIComponent(document.cookie)
