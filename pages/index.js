@@ -7,6 +7,7 @@ import { useGetMoviesQuery, useGetSuggestionQuery } from '../store/api.slice'
 import { eraseCookie } from '../utils/cookies'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import Suggestion from '../components/Suggestion'
 
 export default function Home() {
   const router = useRouter()
@@ -56,6 +57,9 @@ export default function Home() {
 
       <Header />
       {/* HEADER */}
+
+      <Suggestion />
+
       <Nav />
       {/* NAV */}
       {!isLoading && !loading && data ? (

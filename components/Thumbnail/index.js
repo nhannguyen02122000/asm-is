@@ -28,8 +28,8 @@ function Thumbnail({ result }) {
     router.push(`/watch/?id=${result.id}`)
   }
   return (
-    <div className="group cursor-pointer sm:p-3 ">
-      <Image layout="responsive" height={300} width={200} src={result.image} onClick={handleMovieClick} />
+    <div className="group cursor-pointer sm:p-3 w-80">
+      <Image layout="responsive" height={900} width={600} src={result.image} onClick={handleMovieClick} />
       <div className="p-2">
         <p className="truncate max-w-md">{result.genre}</p>
         <p className="truncate max-w-md text-lg">Tập: {result.episodes}</p>
