@@ -1,17 +1,28 @@
 import StarRatings from 'react-star-ratings'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
+import { useGetMoviesQuery } from '../store/api.slice'
+import { useSelector } from 'react-redux'
+
 function Watch() {
-  // const router = useRouter()
-  // const {
-  //   isReady,
-  //   query: { rating, movie },
-  // } = router
+  const router = useRouter()
+  const token = useSelector((state) => state.app.token)
+  const {
+    isReady,
+    query: { id },
+  } = router
+  const { data, error: errorMovie, isLoading } = useGetMoviesQuery({ token }, { skip: !isReady || !token })
 
   const [rating, setRating] = useState(0)
   const onRatingChange = (val) => {
     setRating(val)
   }
+
+  useEffect(() => {
+    if (!data || !id) return
+    const ele = data.result.find((ele) => ele.id === +id)
+    setRating((ele.rating * 5) / 9)
+  }, [data, id])
 
   // if (!ratingS) return null
   return (

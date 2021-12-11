@@ -1,6 +1,5 @@
-import { ThumbUpIcon } from '@heroicons/react/outline'
 import Image from 'next/image'
-import ReactStars from 'react-rating-stars-component'
+import StarRatings from 'react-star-ratings'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 const getImageLink = (idx) => {
@@ -35,11 +34,11 @@ function Thumbnail({ result }) {
     setRating(val)
   }
   const handleClick = () => {
-    router.push(`/watch/?rating=${rating}&movie=${result.name}`)
+    router.push(`/watch/?id=${result.id}`)
   }
   return (
     <div className="group cursor-pointer sm:p-3 ">
-      <Image layout="responsive" height={300} width={200} src={result.image} onClick={handleClick} priority />
+      <Image layout="responsive" height={300} width={200} src={result.image} onClick={handleClick} />
       <div className="p-2">
         <p className="truncate max-w-md">{result.genre}</p>
         <p className="truncate max-w-md text-lg">Tập: {result.episodes}</p>
@@ -50,16 +49,15 @@ function Thumbnail({ result }) {
           {result.name}
         </h2>
         <div className="z-50">
-          <ReactStars
-            count={5}
-            value={rating}
-            onChange={onRatingChange}
-            size={20}
-            isHalf={true}
-            emptyIcon={<i className="far fa-star"></i>}
-            halfIcon={<i className="fa fa-star-half-alt"></i>}
-            fullIcon={<i className="fa fa-star"></i>}
-            activeColor="#ffd700"
+          <StarRatings
+            rating={rating}
+            starRatedColor="yellow"
+            starHoverColor="yellow"
+            changeRating={onRatingChange}
+            numberOfStars={5}
+            name="rating"
+            starDimension="20px"
+            starSpacing="3px"
           />
         </div>
       </div>
