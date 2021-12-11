@@ -1,7 +1,7 @@
 import StarRatings from 'react-star-ratings'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { useGetMoviesQuery } from '../store/api.slice'
+import { useGetMoviesQuery, useWatchingMutation } from '../store/api.slice'
 import { useSelector } from 'react-redux'
 import { useRatingMutation } from '../store/api.slice'
 
@@ -14,6 +14,7 @@ function Watch() {
   } = router
   const { data, error: errorMovie, isLoading } = useGetMoviesQuery({ token }, { skip: !isReady || !token })
   const [rateOnDB, { data: rateDBData, error: rateDBError }] = useRatingMutation()
+  const [watchOnDB, { data: watchDBData, error: watchDBError }] = useWatchingMutation()
 
   const [rating, setRating] = useState(0)
   const [ele, setEle] = useState(null)
@@ -27,6 +28,14 @@ function Watch() {
   }
 
   useEffect(() => {
+    if (!data || !id) return
+    const ele = data.result.find((ele) => ele.id === +id)
+    setRating((ele.rating * 5) / 9)
+    setEle(ele)
+    watchOnDB({ movieid: ele.id, rating: 0.1, token })
+  }, [data, id])
+
+  useEffect(() => {
     if (rateDBData) {
     } else if (rateDBError) {
       alert('Có lỗi xảy ra, vui lòng thử lại')
@@ -34,11 +43,11 @@ function Watch() {
   }, [rateDBData, rateDBError])
 
   useEffect(() => {
-    if (!data || !id) return
-    const ele = data.result.find((ele) => ele.id === +id)
-    setRating((ele.rating * 5) / 9)
-    setEle(ele)
-  }, [data, id])
+    if (watchDBData) {
+    } else if (watchDBError) {
+      alert('Có lỗi xảy ra, vui lòng thử lại')
+    }
+  }, [watchDBData, watchDBError])
 
   useEffect(() => {
     if (errorMovie) router.push('/')

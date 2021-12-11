@@ -41,6 +41,18 @@ const apiSlice = createApi({
         }),
       }),
 
+      watching: builder.mutation({
+        query: ({ movieid, rating, token }) => ({
+          url: `/watching`,
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` },
+          data: {
+            movieid,
+            rating,
+          },
+        }),
+      }),
+
       getMovies: builder.query({
         query: ({ token }) => ({
           url: `/movies-rating`,
@@ -59,7 +71,13 @@ const apiSlice = createApi({
   },
 })
 
-export const { useRegisterMutation, useLoginMutation, useGetMoviesQuery, useGetMoviesByCodeQuery, useRatingMutation } =
-  apiSlice
+export const {
+  useRegisterMutation,
+  useLoginMutation,
+  useGetMoviesQuery,
+  useGetMoviesByCodeQuery,
+  useRatingMutation,
+  useWatchingMutation,
+} = apiSlice
 
 export default apiSlice
