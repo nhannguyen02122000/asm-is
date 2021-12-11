@@ -77,7 +77,7 @@ function Watch() {
           <p className="text-lg mt-1">Tập: {`${ele?.episodes ?? ''}`}</p>
         </div>
         <iframe
-          className="w-3/4 h-[50vh]"
+          className="w-3/4 h-[65vh]"
           // width="853"
           // height="480"
           src={`https://www.youtube.com/embed/qig4KOK2R2g?enablejsapi=1&wmode=opaque&autoplay=1`}
