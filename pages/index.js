@@ -15,7 +15,6 @@ export default function Home() {
   const { data: aMovie, error: errorAMovie } = useGetMoviesByCodeQuery({ id: 1, token }, { skip: !token })
 
   useEffect(() => {
-    console.log({ errorAMovie, errorMovie })
     if (!errorAMovie && !errorMovie) return
     if (
       (errorAMovie.status === 403 && errorAMovie.data.code === 'token_not_valid') ||
@@ -38,7 +37,7 @@ export default function Home() {
       <Nav />
       {/* NAV */}
       {!isLoading && data ? (
-        <Results data={data} />
+        <Results data={data.result} />
       ) : (
         <div className="flex justify-center mt-10">
           <div className="w-10 h-10 border-b-2 border-white rounded-full animate-spin"></div>

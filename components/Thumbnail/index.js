@@ -1,6 +1,6 @@
 import { ThumbUpIcon } from '@heroicons/react/outline'
 import Image from 'next/image'
-import StarRatings from 'react-star-ratings'
+import ReactStars from 'react-rating-stars-component'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 const getImageLink = (idx) => {
@@ -28,7 +28,7 @@ const getImageLink = (idx) => {
 }
 
 function Thumbnail({ result }) {
-  const [rating, setRating] = useState(0)
+  const [rating, setRating] = useState(result.rating ? (result.rating / 9) * 5 : 0)
   const router = useRouter()
   const onRatingChange = (val) => {
     console.log(val)
@@ -39,9 +39,10 @@ function Thumbnail({ result }) {
   }
   return (
     <div className="group cursor-pointer sm:p-3 ">
-      <Image layout="responsive" height={300} width={200} src={getImageLink(result.id)} onClick={handleClick} />
+      <Image layout="responsive" height={300} width={200} src={result.image} onClick={handleClick} priority />
       <div className="p-2">
         <p className="truncate max-w-md">{result.genre}</p>
+        <p className="truncate max-w-md text-lg">Tập: {result.episodes}</p>
         <h2
           className="mt-1 text-2xl text-white transition-all duration-100 ease-in-out group-hover:font-bold truncate"
           onClick={handleClick}
@@ -49,15 +50,16 @@ function Thumbnail({ result }) {
           {result.name}
         </h2>
         <div className="z-50">
-          <StarRatings
-            rating={rating}
-            starRatedColor="yellow"
-            starHoverColor="yellow"
-            changeRating={onRatingChange}
-            numberOfStars={5}
-            name="rating"
-            starDimension="20px"
-            starSpacing="3px"
+          <ReactStars
+            count={5}
+            value={rating}
+            onChange={onRatingChange}
+            size={20}
+            isHalf={true}
+            emptyIcon={<i className="far fa-star"></i>}
+            halfIcon={<i className="fa fa-star-half-alt"></i>}
+            fullIcon={<i className="fa fa-star"></i>}
+            activeColor="#ffd700"
           />
         </div>
       </div>

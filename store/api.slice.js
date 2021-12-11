@@ -31,7 +31,7 @@ const apiSlice = createApi({
 
       getMovies: builder.query({
         query: ({ token }) => ({
-          url: `/movies`,
+          url: `/movies-rating`,
           headers: { Authorization: `Bearer ${token}` },
         }),
         providesTags: ['Movie'],
