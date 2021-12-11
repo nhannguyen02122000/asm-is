@@ -39,8 +39,9 @@ export default function Home() {
       {!isLoading && data ? (
         <Results data={data.result} />
       ) : (
-        <div className="flex justify-center mt-10">
+        <div className="flex flex-col items-center justify-center mt-12">
           <div className="w-10 h-10 border-b-2 border-white rounded-full animate-spin"></div>
+          <p className="mt-2">Đợi một chút nhé</p>
         </div>
       )}
       {/* RESULTS */}
